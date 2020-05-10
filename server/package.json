@@ -1,0 +1,27 @@
+{
+  "name": "cachecheats",
+  "version": "1.0.0",
+  "description": "Geocaching helper demo app",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon server/",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "LuKa <kaj.lund@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "consola": "^2.12.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
+    "hpp": "^0.2.3",
+    "xss": "^1.0.6",
+    "xss-clean": "^0.1.1"
+  }
+}
