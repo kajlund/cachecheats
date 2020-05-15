@@ -16,7 +16,7 @@ Inside the server folder run `npm install`to install dependencies. The `npm star
 
 - [x] Create initial server setup.
 - [x] Add 404 handler
-- Add Database connection
+- [x] Add Database connection
 - Add user registration
 - Add user login
 - Add Authentication & Authorization Middleware

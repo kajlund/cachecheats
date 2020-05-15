@@ -6,10 +6,15 @@ const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
 const hpp = require('hpp');
+const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 
 const cnf = require('./config');
 const { AppError } = require('./util/errors');
+const { connectDB } = require('./db');
+
+log.info('Connecting to DB');
+connectDB();
 
 log.info('Creating app and setting port');
 const app = express();
@@ -39,6 +44,10 @@ app.use(xss());
 // Prevent http param pollution
 log.info('Prevent param pollution');
 app.use(hpp());
+
+// Data sanitization to prevent NoSQL query injection
+log.info('Prevent NoSQL Query injection');
+app.use(mongoSanitize());
 
 // Enable CORS
 log.info('Enable CORS');
