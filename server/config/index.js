@@ -7,7 +7,7 @@ const pack = require('../package.json');
 const cnf = {};
 
 // Load env vars
-dotenv.config();
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 cnf.env = process.env.NODE_ENV || 'development';
 cnf.isProduction = Boolean(cnf.env === 'production');

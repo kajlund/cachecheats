@@ -9,10 +9,12 @@ const hpp = require('hpp');
 const xss = require('xss-clean');
 
 const cnf = require('./config');
+const { AppError } = require('./util/errors');
 
 log.info('Creating app and setting port');
 const app = express();
 app.set('port', cnf.port);
+app.set('env', cnf.env);
 
 /* MIDDLEWARE */
 log.info('Adding middleware...');
@@ -48,5 +50,13 @@ app.use(express.static(path.join(process.cwd(), 'public'), { maxAge: 31557600000
 
 log.info('Registering routes');
 app.use('/api/v1/about', require('./routes/api/v1/about'));
+
+// any route not caught at this point returns 404
+app.all('*', (req, res, next) => {
+  next(new AppError(`Not Found ${req.originalUrl}`, 404));
+});
+
+/* catch-all route errors */
+app.use(require('./middleware/error'));
 
 module.exports = app;

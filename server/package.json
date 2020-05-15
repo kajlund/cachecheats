@@ -4,7 +4,7 @@
   "description": "Geocaching helper demo app",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon server/",
+    "dev": "nodemon server/index",
     "start": "node src/index.js"
   },
   "keywords": [],
