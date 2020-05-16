@@ -59,6 +59,7 @@ app.use(express.static(path.join(process.cwd(), 'public'), { maxAge: 31557600000
 
 log.info('Registering routes');
 app.use('/api/v1/about', require('./routes/api/v1/about'));
+app.use('/api/v1/users', require('./routes/api/v1/users'));
 
 // any route not caught at this point returns 404
 app.all('*', (req, res, next) => {
