@@ -4,8 +4,8 @@
   "description": "Geocaching helper demo app",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server/index",
-    "start": "node src/index.js"
+    "dev": "nodemon index",
+    "start": "node index"
   },
   "keywords": [],
   "author": "LuKa <kaj.lund@gmail.com>",
