@@ -16,7 +16,14 @@ Inside the server folder run `npm install`to install dependencies. The `npm star
 
 - [x] Create initial server setup.
 - [x] Add 404 handler
-- [x] Add Database connection
-- [x] Add user registration
-- Add user login
-- Add Authentication & Authorization Middleware
+- [x] Database connection
+- [x] User registration
+- [x] User login endpoint generating a JWT token
+- [x] Authentication & Authorization Middleware
+- [x] User profile endpoint.
+- Password Reset functionality
+- Add User profile update and delete.
+- Add basic Caches resource CRUD.
+- Add Caches resource search and filter functionality
+- Create initial client setup
+- Create initial client UI mockup

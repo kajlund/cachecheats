@@ -1,8 +1,10 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const router = require('express').Router();
 const { check, validationResult } = require('express-validator');
 const gravatar = require('gravatar');
 const asyncHandler = require('../../../middleware/async');
+const auth = require('../../../middleware/auth');
 
 const User = require('../../../model/User');
 const err = {
@@ -10,6 +12,8 @@ const err = {
   email: 'Email is required, must be a valid email and must be unique',
   pwd: 'Password is required and must be at least 6 characters long',
 };
+
+const jwtSecret = process.env.JWT_SECRET;
 
 // @route   POST api/users
 // @desc    Register new user. Needs admin approval before allowed in
@@ -54,6 +58,65 @@ router.post(
     const saved = await User.findById(user._id).select('-password');
 
     res.send({ result: 'success', data: saved });
+  })
+);
+
+// @route   POST api/users/login
+// @desc    Login user. Return JWT
+// @access  Public
+router.post(
+  '/login',
+  [
+    check('email', 'Email is required').exists().isString().isEmail(),
+    check('password', 'Password is required').exists().isString(),
+  ],
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      errors.result = 'error';
+      return res.status(401).json({ result: 'error', errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+    // Check that user exists
+    let user = await User.findOne({ email }).select('+password');
+    if (!user) {
+      return res.status(401).json({
+        result: 'error',
+        errors: [{ msg: 'Invalid email or password' }],
+      });
+    }
+
+    // Verify password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        result: 'error',
+        errors: [{ msg: 'Invalid email or password' }],
+      });
+    }
+
+    // Return JWT
+    const payload = { user: { id: user.id, role: user.role } };
+    jwt.sign(payload, jwtSecret, { expiresIn: 86400 }, (err, token) => {
+      if (err) {
+        throw err;
+      }
+      res.header('x-auth-token', token).json({ result: 'success', data: { token } });
+    });
+  })
+);
+
+// @route   GET api/users/me
+// @desc    Return loggen in user's profile info
+// @access  Private
+router.get(
+  '/me',
+  auth,
+  asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
+    res.send({ result: 'success', data: { user } });
   })
 );
 

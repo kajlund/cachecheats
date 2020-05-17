@@ -22,10 +22,9 @@ const userSchema = new mongoose.Schema({
   avatar: String,
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user',
+    enum: ['', 'user', 'admin'],
+    default: '',
   },
-  isAllowedAccess: { type: Boolean, default: false },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   createdAt: {
