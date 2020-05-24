@@ -1,6 +1,6 @@
 // Generic catch-all Error Handler Middleware
 
-const log = require('consola');
+const log = require('../util/logger');
 
 const { CustomError } = require('../util/errors');
 

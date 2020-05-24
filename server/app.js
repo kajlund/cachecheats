@@ -1,7 +1,6 @@
 const path = require('path');
 
 const compression = require('compression');
-const log = require('consola');
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
@@ -10,7 +9,6 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 
 const log = require('./util/logger');
-const { CustomError } = require('./util/errors');
 const { connectDB } = require('./db');
 
 log.info('Connecting to DB');
@@ -59,9 +57,11 @@ app.use(
   express.static(path.join(process.cwd(), 'public'), { maxAge: 31557600000 })
 );
 
+app.use(require('./middleware/logger'));
+
 // Register Routes
 log.info('Registering routes');
-app.use('/api/v1/about', require('./routes/api/v1/about'));
+app.use('/api/v1/', require('./routes/api/v1/base'));
 app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 
 // any route not caught at this point returns 404

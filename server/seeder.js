@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const dotenv = require('dotenv');
-const log = require('consola');
+const log = require('./util/logger');
 const mongoose = require('mongoose');
 
 // load env vars
@@ -28,7 +28,7 @@ const importData = async () => {
   try {
     await User.create(users);
 
-    log.success('Data imported...');
+    log.info('Data imported...');
     process.exit();
   } catch (err) {
     log.error(err);
@@ -40,7 +40,7 @@ const deleteData = async () => {
   try {
     await User.deleteMany();
 
-    log.success('Data destroyed...');
+    log.info('Data destroyed...');
     process.exit();
   } catch (err) {
     log.error(err);

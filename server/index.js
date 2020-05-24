@@ -2,10 +2,13 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+const log = require('./util/logger');
 const app = require('./app');
 
 const server = app.listen(app.get('port'), () => {
-  log.success(`App running on port: ${app.get('port')} in ${app.get('env')} mode.`);
+  log.info(
+    `App running on port: ${app.get('port')} in ${app.get('env')} mode.`
+  );
   log.info('Press Ctrl-C to stop\n');
 });
 

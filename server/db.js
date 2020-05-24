@@ -1,4 +1,4 @@
-const log = require('consola');
+const log = require('./util/logger');
 const mongoose = require('mongoose');
 
 exports.connectDB = async () => {
