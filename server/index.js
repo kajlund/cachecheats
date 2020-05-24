@@ -15,7 +15,8 @@ const server = app.listen(app.get('port'), () => {
 process.on('uncaughtException', function (err) {
   log.error('💥 Uncaugt Exception:');
   log.fatal(err.stack || err.message || err);
-  process.exit(1);
+  // Close server and exit process
+  server.close(() => process.exit(1));
 });
 
 // Handle unhandled promise rejection
