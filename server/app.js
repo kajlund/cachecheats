@@ -9,7 +9,7 @@ const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 
-const cnf = require('./config');
+const log = require('./util/logger');
 const { CustomError } = require('./util/errors');
 const { connectDB } = require('./db');
 
@@ -18,8 +18,8 @@ connectDB();
 
 log.info('Creating app and setting port');
 const app = express();
-app.set('port', cnf.port);
-app.set('env', cnf.env);
+app.set('port', parseInt(process.env.PORT, 10) || 3000);
+app.set('env', process.env.NODE_ENV || 'production');
 
 /* MIDDLEWARE */
 log.info('Adding middleware...');
