@@ -10,7 +10,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 
 const cnf = require('./config');
-const { AppError } = require('./util/errors');
+const { CustomError } = require('./util/errors');
 const { connectDB } = require('./db');
 
 log.info('Connecting to DB');
@@ -55,15 +55,20 @@ app.use(cors());
 
 // Serve static files
 log.info('Serve public folder');
-app.use(express.static(path.join(process.cwd(), 'public'), { maxAge: 31557600000 }));
+app.use(
+  express.static(path.join(process.cwd(), 'public'), { maxAge: 31557600000 })
+);
 
+// Register Routes
 log.info('Registering routes');
 app.use('/api/v1/about', require('./routes/api/v1/about'));
-app.use('/api/v1/users', require('./routes/api/v1/users'));
+app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 
 // any route not caught at this point returns 404
 app.all('*', (req, res, next) => {
-  next(new AppError(`Not Found ${req.originalUrl}`, 404));
+  res
+    .status(404)
+    .json({ success: false, error: `Not Found ${req.originalUrl}` });
 });
 
 /* catch-all route errors */

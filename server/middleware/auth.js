@@ -1,34 +1,39 @@
 const jwt = require('jsonwebtoken');
 
-const jwtSecret = process.env.JWT_SECRET;
+const { CustomError } = require('../util/errors');
+const User = require('../model/User');
+const wrap = require('./wrap');
 
-module.exports = (req, res, next) => {
-  // Get token from header
-  const token = req.header('x-auth-token');
-  if (!token) {
-    return res.status(401).json({
-      result: 'error',
-      errors: [{ msg: 'Request has no authorization header' }],
-    });
+exports.protect = wrap(async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    // Set token from Bearer token in header
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies && req.cookies.token) {
+    // Set token from cookie
+    token = req.cookies.token;
   }
 
-  // Verify token
+  // Make sure token exists
+  if (!token) {
+    throw new CustomError('Not authorized to access this route', 401);
+  }
+
   try {
-    const decoded = jwt.verify(token, jwtSecret);
-    if (!decoded.user.role) {
-      // Admin needs to assign a role before user has access
-      return res.status(401).json({
-        result: 'error',
-        errors: [{ msg: 'User account is registered but has not been approved' }],
-      });
-    }
-    req.user = decoded.user;
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.id);
+    // if (!req.user.role) {
+    //   // Admin needs to assign a role before user has access
+    //   throw new CustomError('Not authorized to access this route', 401);
+    // }
 
     next();
-  } catch (error) {
-    return res.status(401).json({
-      result: 'error',
-      errors: [{ msg: 'Invalid token' }],
-    });
+  } catch (err) {
+    throw new CustomError(err.message, 401);
   }
-};
+});
