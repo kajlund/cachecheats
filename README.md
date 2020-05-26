@@ -21,6 +21,7 @@ Inside the server folder run `npm install`to install dependencies. The `npm star
 - [x] User login endpoint generating a JWT token
 - [x] Authentication & Authorization Middleware
 - [x] User profile endpoint.
+- [x] Municipalities data. CRUD + Seeder
 - Password Reset functionality
 - Add User profile update and delete.
 - Add basic Caches resource CRUD.

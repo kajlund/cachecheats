@@ -10,6 +10,7 @@ dotenv.config();
 
 // Load models
 const User = require('./model/User');
+const Municipality = require('./model/Municipality');
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -22,11 +23,18 @@ mongoose.connect(process.env.MONGO_URI, {
 const users = JSON.parse(
   fs.readFileSync(path.join(process.cwd(), '_data', 'users.json'), 'utf-8')
 );
+const municipalities = JSON.parse(
+  fs.readFileSync(
+    path.join(process.cwd(), '_data', 'municipalities.json'),
+    'utf-8'
+  )
+);
 
 // Import into DB
 const importData = async () => {
   try {
     await User.create(users);
+    await Municipality.create(municipalities);
 
     log.info('Data imported...');
     process.exit();
@@ -39,6 +47,7 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await User.deleteMany();
+    await Municipality.deleteMany();
 
     log.info('Data destroyed...');
     process.exit();
