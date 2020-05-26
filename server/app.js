@@ -1,6 +1,7 @@
 const path = require('path');
 
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
@@ -30,6 +31,9 @@ app.use(compression());
 log.info('Adding form and json input handling middleware');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Cookie Parser
+app.use(cookieParser());
 
 // Set security headers
 log.info('Set Helmet security headers');

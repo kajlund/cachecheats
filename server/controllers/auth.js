@@ -27,19 +27,21 @@ exports.login = wrap(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!password || !is.email(email)) {
-    throw new CustomError('Please provide a valid email and a password', 400);
+    return next(
+      new CustomError('Please provide a valid email and a password', 400)
+    );
   }
 
   // Check for user
   const user = await User.findOne({ email }).select('+password');
   if (!user) {
-    throw new CustomError('Invalid credentials', 401);
+    return next(new CustomError('Invalid credentials', 401));
   }
 
   // Check password
   const isMatch = await user.matchPassword(password);
   if (!isMatch) {
-    throw new CustomError('Invalid credentials', 401);
+    return next(new CustomError('Invalid credentials', 401));
   }
 
   sendTokenResponse(user, 200, res);
@@ -84,10 +86,12 @@ const sendTokenResponse = (user, statusCode, res) => {
     httpOnly: true,
   };
 
+  // Use HTTPS in production
   if (process.env.NODE_ENV === 'production') {
     options.secure = true;
   }
 
+  // Client can decide to use cookie or bearer token Authorization header
   res.status(statusCode).cookie('token', token, options).json({
     success: true,
     token,
