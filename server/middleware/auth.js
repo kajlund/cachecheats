@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 const { CustomError } = require('../util/errors');
+const log = require('../util/logger');
 const User = require('../model/User');
-const wrap = require('./wrap');
+const wrap = require('../middleware/wrap');
 
 exports.protect = wrap(async (req, res, next) => {
   let token;
@@ -29,6 +30,7 @@ exports.protect = wrap(async (req, res, next) => {
 
     next();
   } catch (err) {
+    log.error(err.stack);
     return next(new CustomError('Not authorized to access this route', 401));
   }
 });
