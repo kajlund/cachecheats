@@ -11,6 +11,7 @@ dotenv.config();
 // Load models
 const User = require('./model/User');
 const Municipality = require('./model/Municipality');
+const CacheType = require('./model/CacheType');
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -23,6 +24,7 @@ mongoose.connect(process.env.MONGO_URI, {
 const users = JSON.parse(
   fs.readFileSync(path.join(process.cwd(), '_data', 'users.json'), 'utf-8')
 );
+
 const municipalities = JSON.parse(
   fs.readFileSync(
     path.join(process.cwd(), '_data', 'municipalities.json'),
@@ -30,11 +32,16 @@ const municipalities = JSON.parse(
   )
 );
 
+const cachetypes = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), '_data', 'cachetypes.json'), 'utf-8')
+);
+
 // Import into DB
 const importData = async () => {
   try {
     await User.create(users);
     await Municipality.create(municipalities);
+    await CacheType.create(cachetypes);
 
     log.info('Data imported...');
     process.exit();
@@ -48,6 +55,7 @@ const deleteData = async () => {
   try {
     await User.deleteMany();
     await Municipality.deleteMany();
+    await CacheType.deleteMany();
 
     log.info('Data destroyed...');
     process.exit();

@@ -22,6 +22,7 @@ Inside the server folder run `npm install`to install dependencies. The `npm star
 - [x] Authentication & Authorization Middleware
 - [x] User profile endpoint.
 - [x] Municipalities data. CRUD + Seeder
+- [x] Add CacheType. CRUD + Seeder
 - Password Reset functionality
 - Add User profile update and delete.
 - Add basic Caches resource CRUD.

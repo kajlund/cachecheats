@@ -68,6 +68,7 @@ log.info('Registering routes');
 app.use('/api/v1/', require('./routes/api/v1/base'));
 app.use('/api/v1/auth', require('./routes/api/v1/auth'));
 app.use('/api/v1/municipalities', require('./routes/api/v1/municipalities'));
+app.use('/api/v1/cachetypes', require('./routes/api/v1/cachetypes'));
 
 // any route not caught at this point returns 404
 app.all('*', (req, res, next) => {
