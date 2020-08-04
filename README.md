@@ -23,6 +23,7 @@ Inside the server folder run `npm install`to install dependencies. The `npm star
 - [x] User profile endpoint.
 - [x] Municipalities data. CRUD + Seeder
 - [x] Add CacheType. CRUD + Seeder
+- [x] Add Cache and Comment models plus relations
 - Password Reset functionality
 - Add User profile update and delete.
 - Add basic Caches resource CRUD.

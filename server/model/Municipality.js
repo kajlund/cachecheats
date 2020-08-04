@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const MunicipalitySchema = new mongoose.Schema(
+const Schema = mongoose.Schema;
+
+const MunicipalitySchema = new Schema(
   {
     code: {
       type: String,
@@ -15,6 +17,12 @@ const MunicipalitySchema = new mongoose.Schema(
       required: [true, 'A municipality must have a name'],
       trim: true,
     },
+    geocaches: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Geocache',
+      },
+    ],
   },
   { timestamps: true }
 );

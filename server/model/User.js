@@ -3,7 +3,9 @@ const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema(
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema(
   {
     name: {
       type: String,
@@ -36,6 +38,18 @@ const UserSchema = new mongoose.Schema(
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+    geocaches: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Geocache',
+      },
+    ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
   },
   { timestamps: true }
 );
