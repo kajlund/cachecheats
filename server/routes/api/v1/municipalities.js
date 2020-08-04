@@ -1,5 +1,7 @@
 const express = require('express');
 
+const wrap = require('../../../middleware/wrap');
+
 const {
   getMunicipalities,
   getMunicipality,
@@ -10,12 +12,12 @@ const {
 
 const router = express.Router();
 
-router.route('/').get(getMunicipalities).post(createMunicipality);
+router.route('/').get(wrap(getMunicipalities)).post(wrap(createMunicipality));
 
 router
   .route('/:id')
-  .get(getMunicipality)
-  .put(updateMunicipality)
-  .delete(deleteMunicipality);
+  .get(wrap(getMunicipality))
+  .put(wrap(updateMunicipality))
+  .delete(wrap(deleteMunicipality));
 
 module.exports = router;

@@ -1,13 +1,12 @@
 const is = require('is_js');
 
 const User = require('../model/User');
-const wrap = require('../middleware/wrap');
 const { CustomError } = require('../util/errors');
 
 // @desc      Register user. Free to register but Admin must set role before accepted
 // @route     POST /api/v1/auth/register
 // @access    Public
-exports.register = wrap(async (req, res, next) => {
+exports.register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   // Create user
@@ -18,12 +17,12 @@ exports.register = wrap(async (req, res, next) => {
   });
 
   sendTokenResponse(user, 200, res);
-});
+};
 
 // @desc   Logon user and return JWT token on success
 // @route  POST /api/v1/auth/login
 // @access Public
-exports.login = wrap(async (req, res, next) => {
+exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!password || !is.email(email)) {
@@ -45,12 +44,12 @@ exports.login = wrap(async (req, res, next) => {
   }
 
   sendTokenResponse(user, 200, res);
-});
+};
 
 // @desc      Log user out / clear cookie
 // @route     GET /api/v1/auth/logout
 // @access    Public
-exports.logout = wrap(async (req, res, next) => {
+exports.logout = (req, res, next) => {
   res.cookie('token', 'none', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -60,19 +59,19 @@ exports.logout = wrap(async (req, res, next) => {
     success: true,
     data: {},
   });
-});
+};
 
 // @desc      Get current logged in user
 // @route     POST /api/v1/auth/me
 // @access    Private
-exports.me = wrap(async (req, res, next) => {
+exports.me = async (req, res, next) => {
   const user = await User.findById(req.user.id);
 
   res.status(200).json({
     success: true,
     data: user,
   });
-});
+};
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
